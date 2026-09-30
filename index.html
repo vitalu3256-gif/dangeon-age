@@ -175,13 +175,6 @@
             50% { opacity: 0.5; }
         }
 
-        .status {
-            margin-top: 16px;
-            font-size: 13px;
-            color: rgba(255, 255, 255, 0.5);
-            min-height: 18px;
-        }
-
         .hint {
             margin-top: 24px;
             padding: 14px 18px;
@@ -194,9 +187,7 @@
             text-align: left;
         }
 
-        .hint b {
-            color: rgba(255, 200, 100, 0.9);
-        }
+        .hint b { color: rgba(255, 200, 100, 0.9); }
 
         max-width: 480px {
             .container { padding: 40px 24px; }
@@ -216,14 +207,14 @@
             и раскрой древние тайны подземного мира.
         </p>
 
-        <button class="download-btn" id="downloadBtn">
+        <!-- 👇 Кнопка — это настоящая ссылка, JS не нужен! -->
+        <a href="https://github.com/vitalu3256-gif/dangeon-age/releases/download/v1.0/Dangeon.Age.exe"
+           class="download-btn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
             </svg>
             <span>Скачать .exe</span>
-        </button>
-
-        <div class="status" id="status"></div>
+        </a>
 
         <div class="file-info">
             <span><span class="dot"></span> Доступно</span>
@@ -237,36 +228,5 @@
             и нажми <b>«Сохранить всё равно»</b>.
         </div>
     </div>
-
-    <script>
-        // 👇 Ссылка на файл в GitHub Releases
-        const GAME_FILE_URL  = 'https://github.com/vitalu3256-gif/dangeon-age/releases/download/v1.0/Dangeon.Age.exe';
-        const GAME_FILE_NAME = 'Dangeon.Age.exe';
-
-        const btn = document.getElementById('downloadBtn');
-        const status = document.getElementById('status');
-
-        btn.addEventListener('click', () => {
-            status.textContent = 'Начинаю скачивание...';
-
-            const a = document.createElement('a');
-            a.href = GAME_FILE_URL;
-            a.download = GAME_FILE_NAME;
-            a.rel = 'noopener';
-            a.style.display = 'none';
-            document.body.appendChild(a);
-            a.click();
-SVG namespace
-www.w3.org
-
-
-document.body.removeChild(a);
-
-            setTimeout(() => {
-                status.textContent = '✅ Проверь папку «Загрузки» или Ctrl+J';
-                setTimeout(() => status.textContent = '', 6000);
-            }, 800);
-        });
-    </script>
 </body>
 </html>
