@@ -175,31 +175,27 @@
             50% { opacity: 0.5; }
         }
 
-        .progress-bar {
-            margin-top: 24px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 100px;
-            overflow: hidden;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .progress-bar.active { opacity: 1; }
-
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #7c3aed, #ec4899);
-            border-radius: 100px;
-            transition: width 0.2s;
-        }
-
         .status {
-            margin-top: 12px;
+            margin-top: 16px;
             font-size: 13px;
             color: rgba(255, 255, 255, 0.5);
-            height: 18px;
+            min-height: 18px;
+        }
+
+        .hint {
+            margin-top: 24px;
+            padding: 14px 18px;
+            font-size: 12.5px;
+            line-height: 1.55;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 200, 100, 0.06);
+            border: 1px solid rgba(255, 200, 100, 0.15);
+            border-radius: 12px;
+            text-align: left;
+        }
+
+        .hint b {
+            color: rgba(255, 200, 100, 0.9);
         }
 
         max-width: 480px {
@@ -227,9 +223,6 @@
             <span>Скачать .exe</span>
         </button>
 
-        <div class="progress-bar" id="progressBar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
         <div class="status" id="status"></div>
 
         <div class="file-info">
@@ -237,93 +230,42 @@
             <span>💻 Windows 10/11</span>
             <span>🎮 Single Player</span>
         </div>
+
+        <div class="hint">
+            🛡️ <b>Chrome может предупредить</b> при скачивании — это стандартная защита 
+            для всех .exe файлов. Если файл заблокирован: открой <b>Ctrl + J</b> 
+            и нажми <b>«Сохранить всё равно»</b>.
+        </div>
     </div>
 
     <script>
-        // 👇 ВНИМАНИЕ: Dangeon (с "e"), а не Dungeon!
-        const GAME_FILE_URL  = 'Dangeon Age.exe';
-        const GAME_FILE_NAME = 'Dangeon Age.exe';
+        // 👇 Ссылка на файл в GitHub Releases
+        const GAME_FILE_URL  = 'https://github.com/vitalu3256-gif/dangeon-age/releases/download/v1.0/Dangeon.Age.exe';
+        const GAME_FILE_NAME = 'Dangeon.Age.exe';
 
         const btn = document.getElementById('downloadBtn');
-        const progressBar = document.getElementById('progressBar');
-        const progressFill = document.getElementById('progressFill');
         const status = document.getElementById('status');
 
-        btn.addEventListener('click', async () => {
-            status.textContent = 'Подготовка загрузки...';
-            progressBar.classList.add('active');
-            progressFill.style.width = '0%';
+        btn.addEventListener('click', () => {
+            status.textContent = 'Начинаю скачивание...';
 
-            try {
-                const response = await fetch(GAME_FILE_URL);
-                if (!response.ok) throw new Error('Файл не найд
+            const a = document.createElement('a');
+            a.href = GAME_FILE_URL;
+            a.download = GAME_FILE_NAME;
+            a.rel = 'noopener';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
 SVG namespace
 www.w3.org
 
 
-ен: ' + response.status);
+document.body.removeChild(a);
 
-                const contentLength = response.headers.get('content-length');
-                const total = contentLength ? parseInt(contentLength, 10) : 0;
-
-                const reader = response.body.getReader();
-                let received = 0;
-                const chunks = [];
-
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    chunks.push(value);
-                    received += value.length;
-
-                    if (total > 0) {
-                        const percent = (received / total) * 100;
-                        progressFill.style.width = percent + '%';
-                        status.textContent = `Загрузка... ${percent.toFixed(0)}% (${(received/1024/1024).toFixed(1)} / ${(total/1024/1024).toFixed(1)} МБ)`;
-                    } else {
-                        status.textContent = `Загрузка... ${(received/1024/1024).toFixed(1)} МБ`;
-                    }
-                }
-
-                const blob = new Blob([new Uint8Array(
-                    chunks.reduce((acc, c) => {
-                        const tmp = new Uint8Array(acc.length + c.length);
-                        tmp.set(acc);
-                        tmp.set(c, acc.length);
-                        return tmp;
-                    }, new Uint8Array(0))
-                )], { type: 'application/octet-stream' });
-
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = GAME_FILE_NAME;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-
-                status.textContent = '✅ Загрузка завершена!';
-                progressFill.style.width = '100%';
-
-                setTimeout(() => {
-                    progressBar.classList.remove('active');
-                    progressFill.style.width = '0%';
-                    status.textContent = '';
-                }, 3000);
-
-            } catch (err) {
-                console.warn('Fallback на прямое скачивание:', err);
-                const a = document.createElement('a');
-                a.href = GAME_FILE_URL;
-                a.download = GAME_FILE_NAME;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                status.textContent = '';
-                progressBar.classList.remove('active');
-            }
+            setTimeout(() => {
+                status.textContent = '✅ Проверь папку «Загрузки» или Ctrl+J';
+                setTimeout(() => status.textContent = '', 6000);
+            }, 800);
         });
     </script>
 </body>
