@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dangeon Age — Скачать</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(120, 80, 255, 0.25), transparent 70%);
+            filter: blur(80px);
+            animation: float 12s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .bg-glow.two {
+            background: radial-gradient(circle, rgba(255, 80, 180, 0.2), transparent 70%);
+            width: 500px; height: 500px;
+            bottom: -100px; right: -100px;
+            animation-delay: -6s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -55%) scale(1.1); }
+        }
+
+        .bg-glow.one { top: 50%; left: 50%; }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 60px 40px;
+            max-width: 640px;
+            width: 90%;
+            background: rgba(20, 20, 30, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 100px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 700;
+            letter-spacing: -1.5px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.55);
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 40px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #7c3aed 0%, #ec4899 100%);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #ec4899 0%, #7c3aed 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+
+.download-btn:hover::before { opacity: 1; }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px -10px rgba(236, 72, 153, 0.7);
+        }
+
+        .download-btn:active { transform: translateY(0); }
+
+        .download-btn svg,
+        .download-btn span { position: relative; z-index: 1; }
+
+        .download-btn svg {
+            width: 20px; height: 20px;
+            transition: transform 0.3s;
+        }
+
+        .download-btn:hover svg { transform: translateY(2px); }
+
+        .file-info {
+            margin-top: 28px;
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .file-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 10px #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .progress-bar {
+            margin-top: 24px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 100px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .progress-bar.active { opacity: 1; }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #7c3aed, #ec4899);
+            border-radius: 100px;
+            transition: width 0.2s;
+        }
+
+        .status {
+            margin-top: 12px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            height: 18px;
+        }
+
+        max-width: 480px {
+            .container { padding: 40px 24px; }
+            .download-btn { padding: 16px 28px; font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow one"></div>
+    <div class="bg-glow two"></div>
+
+    <div class="container">
+        <div class="badge">Версия 1.0 · Windows</div>
+        <h1>Dangeon Age</h1>
+        <p class="subtitle">
+            Погрузись в мрачные подземелья, сражайся с монстрами 
+            и раскрой древние тайны подземного мира.
+        </p>
+
+        <button class="download-btn" id="downloadBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            <span>Скачать .exe</span>
+        </button>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="status" id="status"></div>
+
+        <div class="file-info">
+            <span><span class="dot"></span> Доступно</span>
+            <span>💻 Windows 10/11</span>
+            <span>🎮 Single Player</span>
+        </div>
+    </div>
+
+    <script>
+        // 👇 ВНИМАНИЕ: Dangeon (с "e"), а не Dungeon!
+        const GAME_FILE_URL  = 'Dangeon Age.exe';
+        const GAME_FILE_NAME = 'Dangeon Age.exe';
+
+        const btn = document.getElementById('downloadBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const status = document.getElementById('status');
+
+        btn.addEventListener('click', async () => {
+            status.textContent = 'Подготовка загрузки...';
+            progressBar.classList.add('active');
+            progressFill.style.width = '0%';
+
+            try {
+                const response = await fetch(GAME_FILE_URL);
+                if (!response.ok) throw new Error('Файл не найд
+SVG namespace
+www.w3.org
+
+
+ен: ' + response.status);
+
+                const contentLength = response.headers.get('content-length');
+                const total = contentLength ? parseInt(contentLength, 10) : 0;
+
+                const reader = response.body.getReader();
+                let received = 0;
+                const chunks = [];
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    chunks.push(value);
+                    received += value.length;
+
+                    if (total > 0) {
+                        const percent = (received / total) * 100;
+                        progressFill.style.width = percent + '%';
+                        status.textContent = `Загрузка... ${percent.toFixed(0)}% (${(received/1024/1024).toFixed(1)} / ${(total/1024/1024).toFixed(1)} МБ)`;
+                    } else {
+                        status.textContent = `Загрузка... ${(received/1024/1024).toFixed(1)} МБ`;
+                    }
+                }
+
+                const blob = new Blob([new Uint8Array(
+                    chunks.reduce((acc, c) => {
+                        const tmp = new Uint8Array(acc.length + c.length);
+                        tmp.set(acc);
+                        tmp.set(c, acc.length);
+                        return tmp;
+                    }, new Uint8Array(0))
+                )], { type: 'application/octet-stream' });
+
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = GAME_FILE_NAME;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                status.textContent = '✅ Загрузка завершена!';
+                progressFill.style.width = '100%';
+
+                setTimeout(() => {
+                    progressBar.classList.remove('active');
+                    progressFill.style.width = '0%';
+                    status.textContent = '';
+                }, 3000);
+
+            } catch (err) {
+                console.warn('Fallback на прямое скачивание:', err);
+                const a = document.createElement('a');
+                a.href = GAME_FILE_URL;
+                a.download = GAME_FILE_NAME;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                status.textContent = '';
+                progressBar.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
